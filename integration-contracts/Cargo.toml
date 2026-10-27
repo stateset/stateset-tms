@@ -1,0 +1,23 @@
+[package]
+license = "MIT OR Apache-2.0"
+name = "stateset-freight-contracts"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+stateset-freight = { path = ".." }
+stateset-edi-x12 = { version = "=0.10.2", path = "../../stateset-edi/crates/stateset-edi-x12" }
+serde_json = "1"
+chrono = "0.4"
+
+# Cargo patches belong to the workspace root; use the application's reviewed
+# SQLx dependency patch in this separate qualification workspace as well.
+[patch.crates-io]
+sqlx-core = { path = "../vendor/sqlx-core" }
+
+[profile.dev]
+debug = 0
+
+[profile.test]
+debug = 0

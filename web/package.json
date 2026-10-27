@@ -1,0 +1,30 @@
+{
+  "name": "@stateset/freight",
+  "version": "0.2.3",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "next dev --hostname 127.0.0.1 --port 3010",
+    "build": "next build",
+    "start": "node scripts/start.mjs",
+    "test:e2e": "playwright test",
+    "test:unit": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "0.378.0",
+    "next": "15.5.28",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "@clerk/react": "6.17.8"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "prettier": "^3.6.2"
+  },
+  "overrides": {
+    "postcss": "8.5.30"
+  },
+  "license": "MIT OR Apache-2.0"
+}

@@ -1,0 +1,13 @@
+{
+  "exceptions": [
+    {
+      "advisory": "RUSTSEC-2026-0387",
+      "package": "stateset-freight-runtime-wire",
+      "crate": "crypto-bigint",
+      "version": "0.7.0-rc.28",
+      "approved": "2026-10-27",
+      "expires": "2026-11-26",
+      "reason": "Reached only through the sibling stateset-edi gateway's russh 0.60.3 SSH stack, which pins crypto-bigint =0.7.0-rc.28; the fix needs russh 0.64.1 or newer in stateset-edi. The server and terminal application graphs carry no exception. Approved by the owner for the 0.2.2 source alpha."
+    }
+  ]
+}

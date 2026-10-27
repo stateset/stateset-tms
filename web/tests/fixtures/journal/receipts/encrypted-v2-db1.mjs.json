@@ -1,0 +1,6 @@
+{
+  "runnable_sources_sha256": {
+    "web/lib/save-journal.mjs": "b5cd98a2a6b9db8ebb53eae54ee0c0af8dd85715df1d2771deb96ac3cd1a6e58"
+  },
+  "scope": "Source-only synthetic fixture byte binding; no historical execution attested"
+}

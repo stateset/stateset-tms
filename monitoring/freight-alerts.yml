@@ -1,0 +1,151 @@
+# Prometheus alert rules for the Freight API, built only on the protected /metrics families and
+# the scrape `up` series. Scrape each replica directly as job "stateset-freight" (see
+# docs/observability.md#protected-metrics). FreightNotReady needs a separate blackbox probe of
+# GET /ready as job "stateset-freight-ready". Severity "page" wakes someone; "ticket" waits for
+# working hours. Thresholds are starting points, not qualified production SLOs.
+groups:
+  - name: stateset-freight-availability
+    rules:
+      - alert: FreightScrapeDown
+        expr: |
+          up{job="stateset-freight"} == 0
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: Freight API {{ $labels.instance }} cannot be scraped
+          description: Prometheus has not reached the protected metrics endpoint for 2 minutes. The process may be down, unreachable, or rejecting the metrics token.
+          runbook: docs/observability.md#freightscrapedown
+      - alert: FreightNotReady
+        expr: |
+          probe_success{job="stateset-freight-ready"} == 0
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: Freight API {{ $labels.instance }} is not ready
+          description: GET /ready has failed for 2 minutes. Storage is unavailable, its format is incompatible, the check timed out, or shutdown was requested.
+          runbook: docs/observability.md#freightnotready
+      - alert: FreightServerErrors
+        expr: |
+          (
+            sum by (job, instance) (rate(freight_http_requests_total{outcome="5xx"}[5m]))
+              / sum by (job, instance) (rate(freight_http_requests_total[5m]))
+          ) > 0.05
+          and sum by (job, instance) (rate(freight_http_requests_total[5m])) > 0.1
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: Freight API {{ $labels.instance }} is returning server errors
+          description: More than 5% of requests ended with a 5xx status for 5 minutes. Database unavailability and exhausted database budgets surface here as 503s.
+          runbook: docs/observability.md#freightservererrors
+      - alert: FreightSlowResponses
+        expr: |
+          histogram_quantile(0.95,
+            sum by (job, instance, le) (rate(freight_http_response_headers_duration_seconds_bucket[10m]))
+          ) > 2.5
+          and sum by (job, instance) (rate(freight_http_response_headers_duration_seconds_count[10m])) > 0.1
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: Freight API {{ $labels.instance }} is slow to respond
+          description: The 95th percentile time to response headers has been above 2.5 seconds for 10 minutes.
+          runbook: docs/observability.md#freightslowresponses
+      - alert: FreightDrainStuck
+        expr: |
+          freight_process_draining == 1
+        for: 10m
+        labels:
+          severity: page
+        annotations:
+          summary: Freight API {{ $labels.instance }} has been draining for 10 minutes
+          description: Shutdown was requested but the process is still running. It refuses new work while draining.
+          runbook: docs/observability.md#freightdrainstuck
+      - alert: FreightRestartLoop
+        expr: |
+          resets(freight_process_uptime_seconds[30m]) >= 3
+        labels:
+          severity: ticket
+        annotations:
+          summary: Freight API {{ $labels.instance }} restarted {{ $value }} times in 30 minutes
+          description: The process uptime reset repeatedly. Check startup logs and the container's restart reason.
+          runbook: docs/observability.md#freightrestartloop
+  - name: stateset-freight-admission
+    rules:
+      - alert: FreightAdmissionBacklog
+        expr: |
+          freight_admission_pending / freight_admission_pending_limit > 0.8
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: Freight {{ $labels.lane }} admission queue is above 80% on {{ $labels.instance }}
+          description: Requests have been waiting near the configured global limit for 5 minutes. New requests are rejected once the queue is full.
+          runbook: docs/observability.md#freightadmissionbacklog
+      - alert: FreightAdmissionQueueFull
+        expr: |
+          freight_admission_pending >= freight_admission_pending_limit
+        for: 2m
+        labels:
+          severity: page
+        annotations:
+          summary: Freight {{ $labels.lane }} admission queue is full on {{ $labels.instance }}
+          description: The waiting queue has been at its global limit for 2 minutes, so new requests in this lane are being rejected.
+          runbook: docs/observability.md#freightadmissionqueuefull
+      - alert: FreightWriteAdmissionSaturated
+        expr: |
+          freight_write_admission_requests / freight_write_admission_limit >= 0.9
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: Freight write admission is above 90% on {{ $labels.instance }}
+          description: Active and waiting writes have been near the global write limit for 5 minutes. Further writes are rejected with queue_full or queue_timeout.
+          runbook: docs/observability.md#freightwriteadmissionsaturated
+      - alert: FreightAdmissionLaneClosed
+        expr: |
+          freight_admission_closed == 1
+          unless on (job, instance) freight_process_draining == 1
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: Freight {{ $labels.lane }} admission lane is closed on {{ $labels.instance }}
+          description: A local admission semaphore closed while the process is not draining. That lane cannot admit work until the process restarts.
+          runbook: docs/observability.md#freightadmissionlaneclosed
+      - alert: FreightAdmissionUnobservable
+        expr: |
+          freight_admission_snapshot_available == 0
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: Freight {{ $labels.lane }} admission state is unobservable on {{ $labels.instance }}
+          description: Scrapes have not obtained the admission registry for 10 minutes. Its queue gauges are omitted, so backlog alerts cannot fire for this lane.
+          runbook: docs/observability.md#freightadmissionunobservable
+  - name: stateset-freight-database
+    rules:
+      - alert: FreightDatabasePoolExhausted
+        expr: |
+          freight_database_pool_connections >= freight_database_pool_limit
+          and on (job, instance) freight_database_pool_idle == 0
+        for: 5m
+        labels:
+          severity: ticket
+        annotations:
+          summary: Freight database pool is fully leased on {{ $labels.instance }}
+          description: Every configured PostgreSQL connection has been in use with none idle for 5 minutes. Requests wait for a connection and may hit database budgets.
+          runbook: docs/observability.md#freightdatabasepoolexhausted
+      - alert: FreightDatabasePoolClosed
+        expr: |
+          freight_database_pool_closed == 1
+          unless on (job, instance) freight_process_draining == 1
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: Freight database pool is closed on {{ $labels.instance }}
+          description: The local PostgreSQL pool closed while the process is not draining. Storage requests fail until the process restarts.
+          runbook: docs/observability.md#freightdatabasepoolclosed

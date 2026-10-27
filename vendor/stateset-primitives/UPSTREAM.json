@@ -1,0 +1,20 @@
+{
+  "crate": "stateset-primitives",
+  "version": "1.39.0",
+  "upstream": "https://github.com/stateset/stateset-icommerce",
+  "revision": "b85979972f177217de5722bc6dda29f3c542afc0",
+  "upstream_crate_clean": true,
+  "source_sha256": {
+    "Cargo.toml": "2da91edca8879e26dc3e37db2285d9743947fb6bb7fd61f0c66385d01f119f0a",
+    "README.md": "ff72015262550313ac0fcbbb007346b9272fb8e87674cecaf64298e6fd718677",
+    "src/id.rs": "9d308733e234d6de25be3d25052afde5df0f63ddabbdf515cd2ea02609956a6f",
+    "src/lib.rs": "809407a3a90b21fb75a5c57c64132d57060572078c852fbbf7bd5746841101d0",
+    "src/money.rs": "2f70663ab9b00fe3ff551d3f4f015cb9c157018acad92431c4b51063f74a5178",
+    "src/sku.rs": "80b39fa9cb786cb85d369b69b3293ebf90dafe10b9cb60589e99643f21823031",
+    "LICENSE-MIT": "bba83f79a8d87b2dc0b66334f0c325d952d654d742331291959e3dcadf4a3dd6",
+    "LICENSE-APACHE": "a5717beca8467c307a0d24a41bcd0b83db7e30702eeccb167d001b62d23239a1",
+    "rustfmt.toml": "faf116e816065b1b23b73ab501449e918d32f54bd93c8d922dbb3ec0b391d926"
+  },
+  "changes": "Library source, README and upstream rustfmt.toml copied unchanged. Cargo.toml resolves workspace metadata/dependency versions and lints so this crate builds independently. License texts preserved.",
+  "registry_access": "crates.io metadata requests returned HTTP 403 in this environment; no claim of registry release verification."
+}

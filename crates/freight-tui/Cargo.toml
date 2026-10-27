@@ -1,0 +1,41 @@
+[package]
+license = "MIT OR Apache-2.0"
+name = "stateset-freight-tui"
+version = "0.2.3"
+edition = "2021"
+rust-version = "1.90"
+description = "Terminal operations console for StateSet Freight"
+
+[[bin]]
+name = "freight-tui"
+path = "src/main.rs"
+
+[features]
+api-process-tests = []
+
+[dev-dependencies]
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "process"] }
+
+[dependencies]
+stateset-freight-commerce = { path = "../commerce-bridge" }
+ratatui = { version = "=0.30.2", default-features = false, features = ["crossterm_0_29", "unstable-rendered-line-info"] }
+crossterm = "0.29"
+serde_json = "1"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+tokio = { version = "1", features = ["rt", "net", "time"] }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+signal-hook = "0.3"
+uuid = { version = "1", features = ["v4"] }
+serde = { version = "1", features = ["derive"] }
+ring = "0.17.14"
+hex = "0.4"
+base64 = "0.22.1"
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
+rustix = { version = "1.1.4", features = ["event", "fs", "process"] }
+unicode-segmentation = "1.13.3"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+unwrap_used = "deny"

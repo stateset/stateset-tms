@@ -1,0 +1,31 @@
+[package]
+name = "stateset-pricing"
+description = "Deterministic, WASM-compatible pricing engine for StateSet Commerce"
+version = "1.39.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/stateset/stateset-icommerce"
+repository = "https://github.com/stateset/stateset-icommerce"
+authors = ["StateSet <support@stateset.com>"]
+readme = "README.md"
+keywords = ["commerce", "pricing", "tax", "currency", "promotions"]
+categories = ["mathematics", "finance"]
+
+[dependencies]
+stateset-primitives = { path = "../stateset-primitives", version = "=1.39.0", default-features = false }
+rust_decimal = { version = "1.36", features = ["serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "2.0"
+
+[dev-dependencies]
+serde_json = "1.0"
+proptest = "1.4"
+rust_decimal_macros = "1.36"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+unwrap_used = "deny"

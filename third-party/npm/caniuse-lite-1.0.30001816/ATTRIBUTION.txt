@@ -1,0 +1,12 @@
+caniuse-lite 1.0.30001816
+
+Package metadata credits Ben Briggs.
+Source: https://github.com/browserslist/caniuse-lite/tree/6301f4a091b7fe2ea8037c1aceb2b7239072b7d3
+Data is a smaller representation of caniuse-db; retain upstream credits.
+License: Creative Commons Attribution 4.0 International
+https://creativecommons.org/licenses/by/4.0/
+
+The installed source files were verified against the locked npm tarball and are unmodified.
+This describes the source package, not later build transformations. A distributor must describe
+its own changes and ensure attribution and the complete terms accompany the delivered artifact.
+No endorsement by the upstream project or contributors is implied.

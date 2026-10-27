@@ -1,0 +1,23 @@
+{
+  "files": {
+    "encrypted-v2-db1.mjs": {
+      "qualification": "web/tests/fixtures/journal/receipts/encrypted-v2-db1.mjs.json",
+      "qualification_sha256": "c9bc309abeff3f4e86507936329858f6a5af85e2df18eca23b5b4bd6a4240010",
+      "qualified_source": "web/lib/save-journal.mjs",
+      "sha256": "b5cd98a2a6b9db8ebb53eae54ee0c0af8dd85715df1d2771deb96ac3cd1a6e58"
+    },
+    "plaintext-v1.mjs": {
+      "qualification": "web/tests/fixtures/journal/receipts/plaintext-v1.mjs.json",
+      "qualification_sha256": "65119c2c43e6af39530bedb3f0a2b4d4efa9ac832706abb98ca26f677be35616",
+      "qualified_source": "web/lib/save-journal.mjs",
+      "sha256": "9954a685010fb97e21073dd726109ffd9aa7e9604ee3d53f1978f2b4a645cfae"
+    },
+    "save-intent.mjs": {
+      "qualification": "web/tests/fixtures/journal/receipts/save-intent.mjs.json",
+      "qualification_sha256": "dede3ba8073168e84a376ff9fb19e452e68bb7847e9f3373865a2851aacd25bb",
+      "qualified_source": "web/lib/save-intent.mjs",
+      "sha256": "c8c3b9e536367d99c9c16483709ffdd74ec22e884089b8503b6a519fa4bfed7b"
+    }
+  },
+  "scope": "Synthetic browser journal fixtures; byte bindings only, private historical reports omitted"
+}

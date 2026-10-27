@@ -1,0 +1,8 @@
+# Optional overrides for the separate indexed-catalog queue.
+# Unset values are omitted so the application's dependent defaults apply.
+services:
+  api:
+    environment:
+      FREIGHT_CATALOG_MAX_PENDING:
+      FREIGHT_CATALOG_TENANT_MAX_PENDING:
+      FREIGHT_CATALOG_QUEUE_TIMEOUT_MS:

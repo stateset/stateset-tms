@@ -1,0 +1,13 @@
+StateSet Freight
+Copyright (c) 2026 StateSet
+
+Unless otherwise noted, first-party code in this repository is dual-licensed
+under either of the following licenses, at your option:
+
+  * MIT License (LICENSE-MIT)
+  * Apache License, Version 2.0 (LICENSE-APACHE)
+
+SPDX-License-Identifier: MIT OR Apache-2.0
+
+Third-party components, including vendored code and dependencies, retain their
+own licenses and notices. See THIRD_PARTY_NOTICES.md and the relevant component.

@@ -1,0 +1,21 @@
+[package]
+license = "MIT OR Apache-2.0"
+name = "stateset-freight-runtime-wire"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.90"
+publish = false
+
+# Optional runtime qualification only. The application has no sibling build dependency.
+[dependencies]
+stateset-edi = { version = "=0.10.2", path = "../../stateset-edi" }
+serde_json = "1"
+
+# Patches are not inherited from path dependencies. Keep the reviewed API
+# SQLx patch and the sibling's vendored Swagger build in this wire workspace.
+[patch.crates-io]
+sqlx-core = { path = "../vendor/sqlx-core" }
+utoipa-swagger-ui = { path = "../../stateset-edi/vendor/utoipa-swagger-ui" }
+
+[profile.dev]
+debug = 0

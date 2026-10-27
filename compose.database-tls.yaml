@@ -1,0 +1,59 @@
+# Apply after compose.restricted.yaml. Supply operator-managed certificate files.
+services:
+  database-tls-files:
+    image: ${FREIGHT_POSTGRES_IMAGE:-postgres:16-bookworm}
+    user: root
+    entrypoint: [/bin/bash, /freight/install-postgres-tls.sh]
+    restart: "no"
+    volumes:
+      - ./scripts/install-postgres-tls.sh:/freight/install-postgres-tls.sh:ro
+      - ./scripts/validate-postgres-tls.sh:/freight/validate-postgres-tls.sh:ro
+      - ${FREIGHT_DATABASE_TLS_CERT:?Set the server certificate chain file}:/source/server.crt:ro
+      - ${FREIGHT_DATABASE_TLS_KEY:?Set the server private key file}:/source/server.key:ro
+      - ${FREIGHT_DATABASE_TLS_CA:?Set the trusted CA bundle file}:/source/ca.crt:ro
+      - freight-database-tls:/tls
+
+  postgres:
+    command:
+      - postgres
+      - -c
+      - ssl=on
+      - -c
+      - ssl_min_protocol_version=TLSv1.2
+      - -c
+      - ssl_cert_file=/run/freight-database-tls/current/server.crt
+      - -c
+      - ssl_key_file=/run/freight-database-tls/current/server.key
+      - -c
+      - hba_file=/etc/freight/postgres-tls.pg_hba.conf
+    volumes:
+      - freight-database-tls:/run/freight-database-tls:ro
+      - ./scripts/postgres-tls.pg_hba.conf:/etc/freight/postgres-tls.pg_hba.conf:ro
+      - ${FREIGHT_DATABASE_TLS_CA:?Set the trusted CA bundle file}:/run/freight-database-ca.crt:ro
+    depends_on:
+      database-tls-files:
+        condition: service_completed_successfully
+
+  migrate:
+    environment:
+      PGSSLMODE: verify-full
+      PGSSLROOTCERT: /run/freight-database-ca.crt
+    volumes:
+      - ${FREIGHT_DATABASE_TLS_CA:?Set the trusted CA bundle file}:/run/freight-database-ca.crt:ro
+
+  grants:
+    environment:
+      PGSSLMODE: verify-full
+      PGSSLROOTCERT: /run/freight-database-ca.crt
+    volumes:
+      - ${FREIGHT_DATABASE_TLS_CA:?Set the trusted CA bundle file}:/run/freight-database-ca.crt:ro
+
+  api:
+    environment:
+      PGSSLMODE: verify-full
+      PGSSLROOTCERT: /run/freight-database-ca.crt
+    volumes:
+      - ${FREIGHT_DATABASE_TLS_CA:?Set the trusted CA bundle file}:/run/freight-database-ca.crt:ro
+
+volumes:
+  freight-database-tls:

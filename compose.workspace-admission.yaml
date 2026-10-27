@@ -1,0 +1,6 @@
+# Combine with the normal Compose files after choosing a processing budget.
+# This caps whole-workspace jobs; it is not a process-memory limit.
+services:
+  api:
+    environment:
+      FREIGHT_WORKSPACE_CONCURRENCY: ${FREIGHT_WORKSPACE_CONCURRENCY:?Set an explicit whole-workspace job limit from 1 to 64}

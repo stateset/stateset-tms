@@ -1,0 +1,24 @@
+{
+  "crate": "stateset-pricing",
+  "version": "1.39.0",
+  "upstream": "https://github.com/stateset/stateset-icommerce",
+  "revision": "b85979972f177217de5722bc6dda29f3c542afc0",
+  "upstream_crate_clean": true,
+  "source_sha256": {
+    "README.md": "7702b00c67f07107306f4fc33a64541572529c1eafa40288f1ce015144a87c27",
+    "src/arithmetic.rs": "e3f305e88af2ba4a927e84285e490e647d980db5fa11ef5d8aa33d196481f519",
+    "src/currency.rs": "93a0f8850af55eef9ceb15edeac7243778ef147e7fa47025f5ae60fe7fc44446",
+    "src/error.rs": "12c9fc67ad54b0b93d2ab66d4cf4ecabb2af131aa6496c50c860e03572f18112",
+    "src/lib.rs": "f88d4ced8cd724f029f394cdb93c6b16fd00a61347193107d0e96de1df6027ab",
+    "src/line_item.rs": "5ae7d04aa8a112ab806284efad63b23d21567e5df96f106380fc519b4731e97d",
+    "src/order_total.rs": "35396e58ff7cafa785a8e908731091f4be57f0946700a97f23fd17a0b49acd8e",
+    "src/promotions.rs": "a0260e73a64b4b16d5b2f54c9a7766094108388d3205a180ebfbf0b5e9f1e872",
+    "src/rounding.rs": "cc5a9c6e0fb9fe454edc6b4ea0a521fff50b45e254efaff985595c0da0ae5f38",
+    "src/tax.rs": "f51ae61a65e112556f22a22ecef24fd35b12b71ebad0d37feb3544a12c719290",
+    "src/validation.rs": "6b7560e65836dcd1e68c6f85e8f8ffd8207fc926f9d1e08ae59557a66bb55e21",
+    "LICENSE-MIT": "bba83f79a8d87b2dc0b66334f0c325d952d654d742331291959e3dcadf4a3dd6",
+    "LICENSE-APACHE": "a5717beca8467c307a0d24a41bcd0b83db7e30702eeccb167d001b62d23239a1"
+  },
+  "changes": "Library source and README copied unchanged. Cargo.toml resolves workspace metadata/dependency versions and lints so this crate builds independently; stateset-primitives points at the sibling vendored copy and rust_decimal_macros (used only by tests and doctests) moves to dev-dependencies. License texts preserved from the upstream repository root.",
+  "registry_access": "crates.io metadata requests returned HTTP 403 in this environment; no claim of registry release verification."
+}

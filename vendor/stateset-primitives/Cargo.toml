@@ -1,0 +1,37 @@
+[package]
+name = "stateset-primitives"
+version = "1.39.0"
+edition = "2024"
+rust-version = "1.85"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/stateset/stateset-icommerce"
+authors = ["StateSet <support@stateset.com>"]
+description = "Strongly-typed primitive types for StateSet iCommerce"
+readme = "README.md"
+
+[dependencies]
+serde = { version = "1.0", default-features = false, features = ["alloc", "derive"] }
+uuid = { version = "1.4", default-features = false, features = ["serde"] }
+rust_decimal = { version = "1.36", default-features = false, features = ["serde"] }
+proptest = { version = "1.4", optional = true }
+sqlx = { version = "0.8.1", optional = true, default-features = false, features = ["postgres", "uuid"] }
+rusqlite = { version = "0.32.1", optional = true, features = ["bundled", "functions"] }
+
+[dev-dependencies]
+serde_json = "1.0"
+rust_decimal_macros = "1.36"
+proptest = "1.4"
+proptest-derive = "0.5"
+
+[features]
+default = ["std"]
+std = ["serde/std", "uuid/rng-getrandom", "uuid/std", "uuid/v4", "rust_decimal/std"]
+arbitrary = ["dep:proptest"]
+sqlx-postgres = ["dep:sqlx"]
+rusqlite = ["dep:rusqlite"]
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+unwrap_used = "deny"

@@ -1,0 +1,16 @@
+# First-party project license: MIT OR Apache-2.0.
+# Dependency terms remain attached to their original components.
+[licenses]
+confidence-threshold = 0.8
+allow = [
+  "Apache-2.0",
+  "BSD-2-Clause",
+  "BSD-3-Clause",
+  "BSL-1.0",
+  "CDLA-Permissive-2.0",
+  "ISC",
+  "MIT",
+  "Unicode-3.0",
+  "Unlicense",
+  "Zlib",
+]

@@ -1,0 +1,11 @@
+target
+**/target
+web/node_modules
+web/.next
+web/.next-dev
+docs/evidence
+.env*
+.git
+.agents
+.codex
+.aws

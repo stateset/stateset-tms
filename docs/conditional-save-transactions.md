@@ -1,0 +1,27 @@
+# Shared saves use one transaction: preceding release
+
+The current preparation path is [transaction-owned write preparation](prepared-write-transactions.md). This page retains the preceding qualified implementation, test counts and resource observations.
+
+A new shared save no longer starts a separate receipt-read transaction before its mutation. One PostgreSQL query either returns the immutable original or locks and returns the complete current workspace. This removes the extra read transaction and the existing-tenant insert attempt. Missing-tenant initialization retains the preceding insert/lock/recheck sequence. Business format stays **18**, with the same **25 migrations** and no new table.
+
+This supersedes the ordinary-command shortcut in the [preceding selected receipt release](receipt-replay-lookup.md). Mandatory source probes before canonical Sync reads still have their existing snapshot admission and source checks. Custom portal, file, source-refresh and callback paths retain their own checks and mutation closures.
+
+## Current-state and cancellation contract
+
+The materialized receipt probe observes its exact source marker, receipt-map type and selected receipt together. A hit never executes the conditional `FOR UPDATE` subplan. The shared command checks the existing fingerprint and stopped-save model before returning the original, without waiting for a tenant writer or snapshot read capacity. Its database connection remains owned through selected-record decoding and the format fence. Database admission and timeouts still apply; this does not bypass authentication, route capabilities or tenant identity.
+
+A miss executes the locking branch. If a competing writer commits while that branch waits, PostgreSQL returns the latest locked row. The complete typed model and existing mutation then recheck the receipt, expected version, source grant and financial/file requirements. A competing successful save returns its original once; a stopped save remains stopped. The earlier probe's missing receipt is never permission to overwrite a later decision. A malformed source cannot become a new application. Unknown/missing rows are not silently treated as valid business data.
+
+Shared misses receive source text and use the existing streaming workspace decoder on a blocking worker. They avoid the temporary complete JSON `Value` tree used by the preceding write decoder. The transaction moves with the queued decoder: caller cancellation cannot release its source/format locks or database connection while decoding still runs. An abandoned decode drops its result and rolls back before application. Application remains in the caller's future; this worker does not independently apply an abandoned command. After application/commit begins, interrupted acknowledgement still requires the existing exact-key recovery or explicit stop protocol.
+
+Memory mode checks the original under its existing write guard before cloning a workspace. Ordinary writes and originals no longer use the optional snapshot-read shortcut. Required source reads and ordinary snapshot readers retain their finite queues. Custom party/policy/file paths keep their checks before any receipt result; a generic `replayed` flag is not promoted into a universal no-write rule.
+
+## Evidence
+
+Three real PostgreSQL regressions exercise a held tenant row with zero available read capacity, a first application paused before commit while another command's lookup misses, and an abandoned decoder queued behind an occupied worker. Actual query plans show zero executions of the locking subplan for an original. The race records exactly one source update and version increment. A separate format-upgrade probe remains blocked after caller cancellation until the decoder really finishes; the cancelled application never runs, and its exact key can subsequently apply once. The public original-replay test times out against an isolated copy of the preceding production implementation. These are real source rows, locks, worker ownership and transaction effects.
+
+There is no complete preceding 1,000-shipment five-pair timing baseline in these observations. Do not construct a completion latency ratio from the partial samples. Completed current 1,000-shipment new-save medians are 1.53 and 1.31 seconds. Receipt replay medians in the 100-shipment case increase from about 4.8–5.0 ms to about 6.5–6.6 ms. This regression remains visible. The controller archives successful HTTP results before downstream validation; a later source/diagnostic failure leaves pending verification rather than concealing that received response. Earlier controller versions and their original failures remain retained.
+
+A separate artifact comparison rehashes and parses 176 response/source/fixture archives. It checks every unchanged root, other shipment fact, retained audit prefix, original receipt and exact replay from actual archived data. Cross-run original outcomes match after validating/removing only the two live tracking timestamps; own stored originals and exact receipt replays are not normalized.
+
+Run `scripts/profile-shared-saves.py --generation before|after --inventory <retained-inventory.json> --output <new-report.json>` to repeat the owned synthetic protocol. It accepts no production database URL. Requests are finite and sequential. Sampling, controller checks, request cadence and shared-host order affect the observations; they do not isolate a universal causal memory bound or establish sustained capacity.

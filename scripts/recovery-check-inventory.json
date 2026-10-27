@@ -1,0 +1,226 @@
+{
+  "schema": 1,
+  "basis": {
+    "path": "docs/evidence/schema-startup-recovery-restricted-recovery-v1.json",
+    "sha256": "548508676409b0dfa7d3280c62da7ea0174f4f8b6ff2522e583f7b9320c8e888",
+    "scope": "Names and occurrence counts only, normalized to a stable schema-ledger check ID; no private execution artifacts required at runtime"
+  },
+  "checks": [
+    {
+      "name": "Freight restart against real database preserves source identity and callback receipts",
+      "count": 1
+    },
+    {
+      "name": "a durable original-request stop is recorded before backup without creating its customer",
+      "count": 1
+    },
+    {
+      "name": "actual 214 delivery and 210 cents pass reviewed POD, settlement and customer billing without payment execution",
+      "count": 1
+    },
+    {
+      "name": "actual EDI outage retains signed inbound and attempted outbound work without inventing success",
+      "count": 1
+    },
+    {
+      "name": "actual EDI stable idempotency key replays identical 204 bytes",
+      "count": 1
+    },
+    {
+      "name": "actual EDI tenant, key, test partner and callback registered",
+      "count": 1
+    },
+    {
+      "name": "actual Freight API and workers ready",
+      "count": 1
+    },
+    {
+      "name": "actual Sync and Freight tenant boundaries hold",
+      "count": 1
+    },
+    {
+      "name": "actual Sync canonical read demonstrates legacy snake-case field loss",
+      "count": 1
+    },
+    {
+      "name": "actual Sync server and migrations ready",
+      "count": 1
+    },
+    {
+      "name": "actual application image healthchecks and protected web gateway pass with original image health configuration",
+      "count": 2
+    },
+    {
+      "name": "actual independently approved invoice retains exact full/deferred/compact/selected evidence",
+      "count": 1
+    },
+    {
+      "name": "actual nonroot image schema-only job verifies the exact source migration ledger without seeding or rewriting migration metadata",
+      "count": 2
+    },
+    {
+      "name": "actual parsed carrier invoice requires independent named review and retains the approved revision",
+      "count": 1
+    },
+    {
+      "name": "actual queued 990 and sibling signature apply once through Freight callback/inbox",
+      "count": 1
+    },
+    {
+      "name": "actual signed final 214 preserves physical delivery while missing intermediate proof holds final Sync tracking and finance",
+      "count": 1
+    },
+    {
+      "name": "actual tracking write/read round-trip retains number, carrier and delivery estimate",
+      "count": 1
+    },
+    {
+      "name": "actual web image retains authenticated session and original sealed save before loss",
+      "count": 1
+    },
+    {
+      "name": "all actual services restart with original scoped credentials and encryption/signing configuration",
+      "count": 1
+    },
+    {
+      "name": "all three actual services quiesce before the common logical recovery point",
+      "count": 1
+    },
+    {
+      "name": "authenticated carrier release cancels exact real EDI tender while preserving cancelled Sync order",
+      "count": 1
+    },
+    {
+      "name": "canonical Sync import and actual EDI 204 generation retain order/tender identity",
+      "count": 1
+    },
+    {
+      "name": "carrier contract sourcing binds exact rate and fresh capacity on canonical Sync shipment",
+      "count": 1
+    },
+    {
+      "name": "contract replacement independently refreshes cancelled real Sync source and retains original procurement",
+      "count": 1
+    },
+    {
+      "name": "control tower owns actual EDI route recovery, rejects critical deferral, and closes only after real service releases Sync tracking",
+      "count": 1
+    },
+    {
+      "name": "corrupt EDI-volume archive is refused before restore or original volume loss",
+      "count": 1
+    },
+    {
+      "name": "corrupted archive is rejected before any restore or original database destruction",
+      "count": 1
+    },
+    {
+      "name": "fresh EDI volume restores original bytes, uid/gid, modes and nanosecond mtimes",
+      "count": 1
+    },
+    {
+      "name": "fresh cluster restores every application table, sequence, schema definition and original EDI file",
+      "count": 1
+    },
+    {
+      "name": "fresh cluster retains exact original approval actors, findings, references and decisions",
+      "count": 1
+    },
+    {
+      "name": "fresh web container accepts original signed session and opens exact original sealed save with retained keys",
+      "count": 1
+    },
+    {
+      "name": "fresh-cluster restore retains the exact stop and rejects a delayed original without duplicate business application",
+      "count": 1
+    },
+    {
+      "name": "full native four-stop agreement retains real Sync identity and prevents incomplete EDI 204 handoff",
+      "count": 1
+    },
+    {
+      "name": "healthy actual API uses restricted login with business DML and immutable schema metadata permissions",
+      "count": 2
+    },
+    {
+      "name": "isolated PostgreSQL ready",
+      "count": 2
+    },
+    {
+      "name": "late actual intermediate confirmation releases complete four-stop Sync tracking without inventing reviewed POD",
+      "count": 1
+    },
+    {
+      "name": "matching PostgreSQL tools retain three checked archives and exact EDI data files",
+      "count": 1
+    },
+    {
+      "name": "native EDI callback policy holds private destination; local relay does not mark it delivered",
+      "count": 1
+    },
+    {
+      "name": "native carrier pickup binds real EDI tender and canonical Sync order",
+      "count": 1
+    },
+    {
+      "name": "native customer acceptance books exact selected rates on original Sync shipment",
+      "count": 1
+    },
+    {
+      "name": "original labelled database cluster and EDI data directory are destroyed",
+      "count": 1
+    },
+    {
+      "name": "post-restore Freight receipts and original EDI wires replay without duplicate decisions, documents or control numbers",
+      "count": 1
+    },
+    {
+      "name": "real source cancellation holds tender and preserves upstream status",
+      "count": 1
+    },
+    {
+      "name": "recovery point excludes deliberately later activity instead of claiming zero data loss",
+      "count": 1
+    },
+    {
+      "name": "replacement cluster recreates the exact retained role/grant recipe without elevating the serving API",
+      "count": 1
+    },
+    {
+      "name": "restored original financial cents, journals, documents, corrections, receipts and audit prefix remain exact",
+      "count": 1
+    },
+    {
+      "name": "restored original queues resume against actual EDI with retained histories and exactly one carrier decision",
+      "count": 1
+    },
+    {
+      "name": "restored storage-format trigger rejects obsolete and current-marker aggregate writers without changing original data",
+      "count": 1
+    },
+    {
+      "name": "restored tenant boundaries, callback policy and sequence allocation remain enforced",
+      "count": 1
+    },
+    {
+      "name": "reviewed native movement correction retains original report and physical state while corrected actual time reaches real Sync",
+      "count": 1
+    },
+    {
+      "name": "scoped customer POD share verifies bytes and revokes access without changing finance evidence",
+      "count": 1
+    },
+    {
+      "name": "shared execution chronology rejects contradictory gates atomically and retains consistent scoped timeline through real Sync",
+      "count": 1
+    },
+    {
+      "name": "synthetic cleared bank receipt and payout retain 25000-cent net cash before backup",
+      "count": 1
+    },
+    {
+      "name": "verified actual pickup permits cleared carrier payout before the unchanged planned service date",
+      "count": 1
+    }
+  ]
+}

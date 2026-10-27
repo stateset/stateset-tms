@@ -1,0 +1,17 @@
+{
+  "schema": 1,
+  "actions": {
+    "actions/checkout": {
+      "ref": "refs/tags/v4",
+      "commit": "11d5960a326750d5838078e36cf38b85af677262"
+    },
+    "actions/setup-node": {
+      "ref": "refs/tags/v4",
+      "commit": "49933ea5288caeca8642d1e84afbd3f7d6820020"
+    },
+    "dtolnay/rust-toolchain": {
+      "ref": "refs/heads/1.90.0",
+      "commit": "7dcc700092a1a8b9c17ba0e140b4e34e93000946"
+    }
+  }
+}

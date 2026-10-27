@@ -1,0 +1,909 @@
+{
+  "version": 1,
+  "api_source_sha256": "95b06c85b886d78bbdb62dae554b355b5db2c3ac90694826fff63b3f97be0646",
+  "operations": [
+    {
+      "name": "access",
+      "method": "GET",
+      "path": "/v1/access",
+      "body": "none",
+      "description": "GET /v1/access; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "apply_carrier_credit",
+      "method": "POST",
+      "path": "/v1/carrier-credit-applications",
+      "body": "json",
+      "description": "Record confirmed same-carrier credit allocations across prepared invoices; strict shape below"
+    },
+    {
+      "name": "apply_carrier_revision",
+      "method": "POST",
+      "path": "/v1/carrier-documents/{id}/apply-revision",
+      "body": "json",
+      "description": "Same decision shape; apply source number/amount to an unapproved primary and re-audit"
+    },
+    {
+      "name": "apply_release_response",
+      "method": "POST",
+      "path": "/v1/release-responses/{id}/apply",
+      "body": "json",
+      "description": "`operations.write`; `{expected_load_version}`; applies original retained acknowledgement after all current checks"
+    },
+    {
+      "name": "approve_invoice",
+      "method": "POST",
+      "path": "/v1/invoices/{id}/approve",
+      "body": "json",
+      "description": "Independent named finance user submits `{expected_revision, note}` after entry review; matched/delivered invoice and reviewed POD required; stored bytes verified before commit. Explicit synthetic demo accepts `{}`"
+    },
+    {
+      "name": "bill_statement",
+      "method": "GET",
+      "path": "/v1/bills/{id}/statement",
+      "body": "none",
+      "description": "Tenant-scoped printable HTML attachment; buy cost/internal finance notes excluded"
+    },
+    {
+      "name": "book_appointment",
+      "method": "POST",
+      "path": "/v1/loads/{id}/appointments",
+      "body": "json",
+      "description": "Record/replace a facility-confirmed stop window; shape below"
+    },
+    {
+      "name": "book_quote",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/book",
+      "body": "json",
+      "description": "Atomically book exact accepted rates on one new or existing planned shipment; existing source requires its current version"
+    },
+    {
+      "name": "cancel_appointment",
+      "method": "POST",
+      "path": "/v1/appointments/{id}/cancel",
+      "body": "json",
+      "description": "`{expected_load_version, reason}`; retains original booking/proof"
+    },
+    {
+      "name": "carrier_contract_statement",
+      "method": "GET",
+      "path": "/v1/carrier-contracts/{id}/statement",
+      "body": "none",
+      "description": "GET /v1/carrier-contracts/{id}/statement; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "carrier_release_response",
+      "method": "POST",
+      "path": "/v1/portal/releases/{id}/response",
+      "body": "json",
+      "description": "POST /v1/portal/releases/{id}/response; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "carrier_release_statement",
+      "method": "GET",
+      "path": "/v1/portal/releases/{id}/statement",
+      "body": "none",
+      "description": "GET /v1/portal/releases/{id}/statement; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "command",
+      "method": "POST",
+      "path": "/v1/loads/{id}/commands",
+      "body": "json",
+      "description": "Execute a version-checked lifecycle action"
+    },
+    {
+      "name": "commerce_import",
+      "method": "POST",
+      "path": "/v1/commerce/import",
+      "body": "json",
+      "description": "`{order_id, load}`; fetch native source server-side and atomically import the explicit freight plan"
+    },
+    {
+      "name": "commerce_order",
+      "method": "GET",
+      "path": "/v1/commerce/orders/{id}",
+      "body": "none",
+      "description": "Read a normalized typed native order snapshot"
+    },
+    {
+      "name": "commerce_orders",
+      "method": "GET",
+      "path": "/v1/commerce/orders",
+      "body": "none",
+      "description": "Read validated native iCommerce order candidates; operations role required"
+    },
+    {
+      "name": "commerce_reconcile",
+      "method": "POST",
+      "path": "/v1/outbox/{id}/commerce-review",
+      "body": "json",
+      "description": "`{expected_load_version, expected_total_attempts, expected_shipment_version, contact, reference, note}`; record external review and retire only the local handoff with a durable original receipt; no native PATCH"
+    },
+    {
+      "name": "commerce_review",
+      "method": "GET",
+      "path": "/v1/outbox/{id}/commerce-review",
+      "body": "none",
+      "description": "Operations previews external native advancement for a held handoff; original identity, manifest, binding and newer version are required"
+    },
+    {
+      "name": "commerce_shipments",
+      "method": "GET",
+      "path": "/v1/loads/{id}/commerce-shipments",
+      "body": "none",
+      "description": "Operations-only native shipment discovery for the retained load/order; 25 rows per live page, explicit eligibility reasons and active handoffs; accepts only page"
+    },
+    {
+      "name": "commerce_tracking",
+      "method": "POST",
+      "path": "/v1/loads/{id}/commerce-tracking",
+      "body": "json",
+      "description": "`{expected_load_version, shipment_id, expected_shipment_version}`; queue the reviewed native shipment step with a durable original receipt"
+    },
+    {
+      "name": "commerce_tracking_preview",
+      "method": "GET",
+      "path": "/v1/loads/{id}/commerce-tracking",
+      "body": "none",
+      "description": "Preview one legal native shipment status step, manifest and expected versions"
+    },
+    {
+      "name": "confirm_release",
+      "method": "POST",
+      "path": "/v1/release-requests/{id}/confirm",
+      "body": "json",
+      "description": "Record externally confirmed carrier release with the confirmation body below"
+    },
+    {
+      "name": "console_page",
+      "method": "GET",
+      "path": "/v1/console",
+      "body": "none",
+      "description": "Staff bounded Billing/Payables/Queues projection; required `view`, optional `limit`, `cursor`, `q`, financial `balance` or queue `attention`/`direction`; workspace totals"
+    },
+    {
+      "name": "contract_candidates",
+      "method": "GET",
+      "path": "/v1/quotes/{id}/contract-rates",
+      "body": "none",
+      "description": "GET /v1/quotes/{id}/contract-rates; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "contract_offer",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/contract-offers",
+      "body": "json",
+      "description": "POST /v1/quotes/{id}/contract-offers; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "contract_reprocure",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/contract-reprocure",
+      "body": "json",
+      "description": "POST /v1/quotes/{id}/contract-reprocure; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "correct_movement_time",
+      "method": "POST",
+      "path": "/v1/carrier-submissions/{id}/time-corrections",
+      "body": "json",
+      "description": "Operations appends an exact-source reviewed native pickup/delivery time correction; preserves original report and physical state; current version/predecessor and financial locks apply"
+    },
+    {
+      "name": "correct_stop_event",
+      "method": "POST",
+      "path": "/v1/stop-events/{id}/correct",
+      "body": "json",
+      "description": "Append a gate correction; shape below"
+    },
+    {
+      "name": "correct_stop_service",
+      "method": "POST",
+      "path": "/v1/stop-services/{id}/correct",
+      "body": "json",
+      "description": "Operations appends a service correction retaining the original evidence"
+    },
+    {
+      "name": "create_amendment",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/amendments",
+      "body": "json",
+      "description": "Propose a separately accepted replacement customer plan/base agreement; original remains effective until activation; [request/consent shapes](customer-amendments.md#api)"
+    },
+    {
+      "name": "create_bill",
+      "method": "POST",
+      "path": "/v1/bills",
+      "body": "json",
+      "description": "Customer invoice draft: `{load_id, number, due_date, bill_to_address?}`; amount derives from the sell contract"
+    },
+    {
+      "name": "create_carrier",
+      "method": "POST",
+      "path": "/v1/carriers",
+      "body": "json",
+      "description": "Create carrier: `name`, `scac`, `mc_number`, `insurance_expires`, `equipment`, `partner_id`"
+    },
+    {
+      "name": "create_carrier_adjustment",
+      "method": "POST",
+      "path": "/v1/loads/{id}/carrier-adjustments",
+      "body": "json",
+      "description": "Finance draft: supplemental invoice, credit memo, or revised total against an approved invoice"
+    },
+    {
+      "name": "create_carrier_contract",
+      "method": "POST",
+      "path": "/v1/carrier-contracts",
+      "body": "json",
+      "description": "POST /v1/carrier-contracts; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "create_credit",
+      "method": "POST",
+      "path": "/v1/bills/{id}/credits",
+      "body": "json",
+      "description": "`{expected_version, number, amount_cents, reason, issued_on?, confirmation?}`; caps total active credits at original amount; actual confirmation required when reducing received funds"
+    },
+    {
+      "name": "create_customer",
+      "method": "POST",
+      "path": "/v1/customers",
+      "body": "json",
+      "description": "Create customer: `name`, `contact`, optional `billing_address`"
+    },
+    {
+      "name": "create_driver",
+      "method": "POST",
+      "path": "/v1/drivers",
+      "body": "json",
+      "description": "Create driver: `name`, `phone`, `license_expires`"
+    },
+    {
+      "name": "create_equipment",
+      "method": "POST",
+      "path": "/v1/equipment",
+      "body": "json",
+      "description": "Create equipment: `unit`, `kind`, `plate`"
+    },
+    {
+      "name": "create_invoice",
+      "method": "POST",
+      "path": "/v1/invoices",
+      "body": "json",
+      "description": "Receive/audit: `number`, `load_id`, `amount_cents`, `currency`"
+    },
+    {
+      "name": "create_load",
+      "method": "POST",
+      "path": "/v1/loads",
+      "body": "json",
+      "description": "Operations fetches canonical Sync order; body exactly `{}`; [source check/review shapes](source.md#api)"
+    },
+    {
+      "name": "create_quote",
+      "method": "POST",
+      "path": "/v1/quotes",
+      "body": "json",
+      "description": "Operations creates a customer quote for a new or explicitly bound planned/Sync-imported shipment; [quote request shapes](quotes.md#api)"
+    },
+    {
+      "name": "create_supplement",
+      "method": "POST",
+      "path": "/v1/bills/{id}/supplements",
+      "body": "json",
+      "description": "Draft a separate documented customer supplement against an issued original invoice; see shape below"
+    },
+    {
+      "name": "customer_quote_response",
+      "method": "POST",
+      "path": "/v1/portal/customer-quotes/{id}/response",
+      "body": "json",
+      "description": "Customer accepts, declines, or withdraws its exact publication/version; no booking/custody effect"
+    },
+    {
+      "name": "customer_quote_source",
+      "method": "POST",
+      "path": "/v1/portal/customer-quotes/{id}/source/refresh",
+      "body": "json",
+      "description": "Customer verifies canonical source for its current issued publication; scoped status summary only"
+    },
+    {
+      "name": "customer_quote_statement",
+      "method": "GET",
+      "path": "/v1/portal/customer-quotes/{id}/statement",
+      "body": "none",
+      "description": "Customer's own immutable published quote bytes/hash, including historical revisions"
+    },
+    {
+      "name": "decide_quote",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/decision",
+      "body": "json",
+      "description": "Record actual customer acceptance/decline/withdrawal; retains decision history"
+    },
+    {
+      "name": "dismiss_carrier_document",
+      "method": "POST",
+      "path": "/v1/carrier-documents/{id}/dismiss",
+      "body": "json",
+      "description": "`{expected_load_version, expected_version, note}`; retain an inapplicable canonical 210"
+    },
+    {
+      "name": "document_content",
+      "method": "GET",
+      "path": "/v1/documents/{id}/content",
+      "body": "none",
+      "description": "Authenticated exact-byte attachment with digest and no-store headers"
+    },
+    {
+      "name": "document_preview_list",
+      "method": "GET",
+      "path": "/v1/loads/{id}/documents",
+      "body": "none",
+      "description": "Staff evidence catalog: newest 100 documents for the exact tenant shipment, metadata only, with `total`; private/no-store."
+    },
+    {
+      "name": "document_preview_preview",
+      "method": "GET",
+      "path": "/v1/documents/{id}/preview",
+      "body": "none",
+      "description": "Staff PNG/JPEG preview: bounded RGB8 derivative with source/content hashes and dimensions; private/no-store; original and review state unchanged."
+    },
+    {
+      "name": "edi_event",
+      "method": "POST",
+      "path": "/v1/events",
+      "body": "json",
+      "description": "Ingest supported normalized EDI event; event ID is the deduplication key"
+    },
+    {
+      "name": "history_page",
+      "method": "GET",
+      "path": "/v1/history",
+      "body": "none",
+      "description": "GET /v1/history; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "import_order",
+      "method": "POST",
+      "path": "/v1/sync/import",
+      "body": "json",
+      "description": "`{order_id, load: <freight plan>}`; re-fetch source and atomically link a new load"
+    },
+    {
+      "name": "invoice_approval_evidence",
+      "method": "GET",
+      "path": "/v1/invoices/{id}/approval-evidence",
+      "body": "none",
+      "description": "GET /v1/invoices/{id}/approval-evidence; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "issue_bill",
+      "method": "POST",
+      "path": "/v1/bills/{id}/issue",
+      "body": "json",
+      "description": "Issue/freeze snapshot and post receivable: `{expected_version}`"
+    },
+    {
+      "name": "issue_quote",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/issue",
+      "body": "json",
+      "description": "Select a qualified live offer and freeze the customer quote/issuer"
+    },
+    {
+      "name": "issue_rate_confirmation",
+      "method": "POST",
+      "path": "/v1/loads/{id}/rate-confirmations",
+      "body": "json",
+      "description": "Issue exact-tender frozen carrier rate/stop document; operations only; [request/evidence shapes](carrier-rate-confirmations.md#api-evidence-and-access)"
+    },
+    {
+      "name": "journal_csv",
+      "method": "GET",
+      "path": "/v1/finance/journal.csv",
+      "body": "none",
+      "description": "Balanced freight subledger export with source, reversal, and load IDs"
+    },
+    {
+      "name": "load_catalog",
+      "method": "GET",
+      "path": "/v1/loads",
+      "body": "none",
+      "description": "Staff evidence catalog: newest 100 documents for the exact tenant shipment, metadata only, with `total`; private/no-store."
+    },
+    {
+      "name": "operations_action",
+      "method": "POST",
+      "path": "/v1/operations/issues/{id}/actions",
+      "body": "json",
+      "description": "`operations.write`; reviewed `{expected_version, expected_source_active, source_sha256, action, note, follow_up_at?, defer_until?}`; administrator required for `force_release`"
+    },
+    {
+      "name": "operations_board",
+      "method": "GET",
+      "path": "/v1/operations",
+      "body": "none",
+      "description": "Staff queue; optional `view`, `search`, `limit`, `cursor`; source facts, summaries, metrics, policy"
+    },
+    {
+      "name": "operations_case",
+      "method": "GET",
+      "path": "/v1/operations/issues/{id}",
+      "body": "none",
+      "description": "Current condition and complete retained case/history within the authenticated tenant"
+    },
+    {
+      "name": "operations_policy",
+      "method": "POST",
+      "path": "/v1/operations/policy",
+      "body": "json",
+      "description": "Administrator `operations.configure`; `{expected_version, tracking_stale_minutes, note}`"
+    },
+    {
+      "name": "operations_reconcile",
+      "method": "POST",
+      "path": "/v1/operations/reconcile",
+      "body": "json",
+      "description": "`operations.write`; body exactly `{}`; reconcile authoritative sources without changing their business facts"
+    },
+    {
+      "name": "partner_bill_statement",
+      "method": "GET",
+      "path": "/v1/portal/bills/{id}/statement",
+      "body": "none",
+      "description": "Own customer issued invoice only; drafts/other counterparties return 404"
+    },
+    {
+      "name": "partner_pod",
+      "method": "POST",
+      "path": "/v1/portal/offers/{id}/pod",
+      "body": "binary",
+      "description": "Raw original carrier POD upload and atomic unreviewed attachment after delivery; strict query fields and 10 MiB bound"
+    },
+    {
+      "name": "partner_rate_statement",
+      "method": "GET",
+      "path": "/v1/portal/rate-confirmations/{id}/statement",
+      "body": "none",
+      "description": "Own carrier publication only; exact original HTML/hash"
+    },
+    {
+      "name": "partner_response",
+      "method": "POST",
+      "path": "/v1/portal/offers/{id}/response",
+      "body": "json",
+      "description": "Authenticated carrier accepts/declines exact published tender/rate hash with current version"
+    },
+    {
+      "name": "partner_stop_service",
+      "method": "POST",
+      "path": "/v1/portal/offers/{id}/stop-services",
+      "body": "json",
+      "description": "Current assigned carrier confirms actual intermediate service through its scoped publication"
+    },
+    {
+      "name": "partner_submission_content",
+      "method": "GET",
+      "path": "/v1/portal/submissions/{id}/content",
+      "body": "none",
+      "description": "Exact own carrier-submitted POD download; no generic staff files or other counterparties"
+    },
+    {
+      "name": "partner_tracking",
+      "method": "POST",
+      "path": "/v1/portal/offers/{id}/tracking",
+      "body": "json",
+      "description": "Current scoped carrier reports physical pickup/location/delivery with observed time and retained proof"
+    },
+    {
+      "name": "partner_workspace",
+      "method": "GET",
+      "path": "/v1/portal",
+      "body": "none",
+      "description": "Scoped original file; atomic current-policy/byte check and download-authorization audit"
+    },
+    {
+      "name": "propose_cancellation",
+      "method": "POST",
+      "path": "/v1/loads/{id}/cancellation-fees",
+      "body": "json",
+      "description": "Propose an explicitly agreed carrier/customer fee after cancellation; `charges.write`; [request shapes](cancellations.md#api)"
+    },
+    {
+      "name": "propose_charge",
+      "method": "POST",
+      "path": "/v1/loads/{id}/charges",
+      "body": "json",
+      "description": "Propose documented buy/sell addition or explicit correction; `charges.write`"
+    },
+    {
+      "name": "publish_customer_quote",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/portal-publications",
+      "body": "json",
+      "description": "Operations explicitly publishes an issued customer revision; frozen exact HTML/hash"
+    },
+    {
+      "name": "publish_portal_offer",
+      "method": "POST",
+      "path": "/v1/loads/{id}/portal-offers",
+      "body": "json",
+      "description": "Staff operations publishes the exact current carrier document; counts as communication"
+    },
+    {
+      "name": "publish_release_request",
+      "method": "POST",
+      "path": "/v1/release-requests/{id}/portal-publications",
+      "body": "json",
+      "description": "`operations.write`; `{expected_load_version, expected_previous_id?, message, respond_by}`; UTC RFC3339 deadline in the future and within seven days"
+    },
+    {
+      "name": "quote_statement",
+      "method": "GET",
+      "path": "/v1/quotes/{id}/statement",
+      "body": "none",
+      "description": "Reader-accessible customer document; quote-price/lane/terms only; omits private buy/procurement evidence"
+    },
+    {
+      "name": "rate_statement",
+      "method": "GET",
+      "path": "/v1/rate-confirmations/{id}/statement",
+      "body": "none",
+      "description": "Original HTML bytes and SHA-256; tenant readers"
+    },
+    {
+      "name": "reconfirm_quote",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/reconfirm",
+      "body": "json",
+      "description": "Confirm the same current carrier/rate with new validity and retained evidence"
+    },
+    {
+      "name": "record_cash",
+      "method": "POST",
+      "path": "/v1/cash",
+      "body": "json",
+      "description": "Record external receipt/payout/customer_refund/carrier_refund and exact allocations; see example below"
+    },
+    {
+      "name": "record_quote_offer",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/offers",
+      "body": "json",
+      "description": "Record actual carrier price/contact/reference/validity against the draft revision"
+    },
+    {
+      "name": "record_rate_handoff",
+      "method": "POST",
+      "path": "/v1/rate-confirmations/{id}/handoffs",
+      "body": "json",
+      "description": "Record actual external carrier communication; current doc/load versions, contact/reference/channel/time, optional file"
+    },
+    {
+      "name": "record_stop_event",
+      "method": "POST",
+      "path": "/v1/loads/{id}/stop-events",
+      "body": "json",
+      "description": "Record observed gate arrival/departure; shape below"
+    },
+    {
+      "name": "record_stop_service",
+      "method": "POST",
+      "path": "/v1/loads/{id}/stop-services",
+      "body": "json",
+      "description": "Operations confirms actual intermediate service; exact current version/stop/time/contact/reference/findings"
+    },
+    {
+      "name": "refresh_source",
+      "method": "POST",
+      "path": "/v1/loads/{id}/source/refresh",
+      "body": "json",
+      "description": "Operations fetches canonical Sync order; body exactly `{}`; [source check/review shapes](source.md#api)"
+    },
+    {
+      "name": "reprocure_quote",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/reprocure",
+      "body": "json",
+      "description": "Record replacement carrier procurement after safe withdrawal/release; retains customer sell agreement and original awards/tenders"
+    },
+    {
+      "name": "request_release",
+      "method": "POST",
+      "path": "/v1/loads/{id}/release-requests",
+      "body": "json",
+      "description": "Request carrier release: `{expected_load_version, disposition: \"replan\" or \"cancel\", reason}`"
+    },
+    {
+      "name": "resolve_invoice",
+      "method": "POST",
+      "path": "/v1/invoices/{id}/resolve",
+      "body": "json",
+      "description": "Correct from revised carrier invoice: `expected_amount_cents`, `amount_cents`, `note`"
+    },
+    {
+      "name": "resolve_rate_handoff",
+      "method": "POST",
+      "path": "/v1/rate-confirmations/{id}/handoffs/resolve",
+      "body": "json",
+      "description": "Record actual carrier coordination against an old/changed handoff; retains current ownership"
+    },
+    {
+      "name": "resolve_save",
+      "method": "POST",
+      "path": "/v1/save-recovery/resolve",
+      "body": "json",
+      "description": "POST /v1/save-recovery/resolve; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "resolve_source",
+      "method": "POST",
+      "path": "/v1/source-reviews/{id}/resolve",
+      "body": "json",
+      "description": "Operations records version/digest-fenced customer confirmation or safe cancellation closure"
+    },
+    {
+      "name": "resolve_tender_incident",
+      "method": "POST",
+      "path": "/v1/tender-incidents/{id}/resolve",
+      "body": "json",
+      "description": "Record investigation of a carrier conflict; current ownership is retained; same confirmation body"
+    },
+    {
+      "name": "retain_carrier",
+      "method": "POST",
+      "path": "/v1/release-requests/{id}/retain",
+      "body": "json",
+      "description": "Record externally confirmed retention of the existing carrier with the confirmation body below"
+    },
+    {
+      "name": "retract_rate_handoff",
+      "method": "POST",
+      "path": "/v1/rate-confirmations/{id}/handoffs/retract",
+      "body": "json",
+      "description": "Retain/correct erroneous communication evidence; does not recall a message"
+    },
+    {
+      "name": "retry_inbox",
+      "method": "POST",
+      "path": "/v1/inbox/{id}/retry",
+      "body": "json",
+      "description": "Requeue retained failed inbound EDI document; body `{}`; lease ownership cannot be overridden"
+    },
+    {
+      "name": "retry_outbox",
+      "method": "POST",
+      "path": "/v1/outbox/{id}/retry",
+      "body": "json",
+      "description": "Requeue held/retrying integration request; body `{}`"
+    },
+    {
+      "name": "reverse_cancellation",
+      "method": "POST",
+      "path": "/v1/cancellation-fees/{id}/reverse",
+      "body": "json",
+      "description": "Finance retracts a fee with confirmation/current target version, retains bank history, and leaves actual refunds/credits for reconciliation"
+    },
+    {
+      "name": "reverse_carrier_adjustment",
+      "method": "POST",
+      "path": "/v1/carrier-adjustments/{id}/reverse",
+      "body": "json",
+      "description": "Append opposite posting; retain original approval"
+    },
+    {
+      "name": "reverse_carrier_credit",
+      "method": "POST",
+      "path": "/v1/carrier-credit-applications/{id}/reverse",
+      "body": "json",
+      "description": "Reverse with fresh carrier confirmation and current source/target versions; retains original proof"
+    },
+    {
+      "name": "reverse_cash",
+      "method": "POST",
+      "path": "/v1/cash/{id}/reverse",
+      "body": "json",
+      "description": "`{expected_version, reversed_on, note}`; reverses bookkeeping, does not reverse a transfer"
+    },
+    {
+      "name": "reverse_credit",
+      "method": "POST",
+      "path": "/v1/credits/{id}/reverse",
+      "body": "json",
+      "description": "`{expected_version, expected_bill_version?, reversed_on, note}`; current bill version required after refund history; append reversing journal"
+    },
+    {
+      "name": "review_cancellation",
+      "method": "POST",
+      "path": "/v1/cancellation-fees/{id}/review",
+      "body": "json",
+      "description": "Finance approves/rejects a fee with actual counterparty evidence; approval creates its separate payable/customer invoice"
+    },
+    {
+      "name": "review_carrier_adjustment",
+      "method": "POST",
+      "path": "/v1/carrier-adjustments/{id}/review",
+      "body": "json",
+      "description": "Finance approve/post or reject a draft"
+    },
+    {
+      "name": "review_charge",
+      "method": "POST",
+      "path": "/v1/charges/{id}/review",
+      "body": "json",
+      "description": "Finance approve/reject a proposal; strict versioned decision"
+    },
+    {
+      "name": "review_document",
+      "method": "POST",
+      "path": "/v1/documents/{id}/review",
+      "body": "json",
+      "description": "Finance review: `{expected_version, decision: \"accepted\" or \"rejected\", note}`"
+    },
+    {
+      "name": "review_invoice_entry",
+      "method": "POST",
+      "path": "/v1/invoices/{id}/entry-review",
+      "body": "json",
+      "description": "Finance records `{expected_revision, evidence_reference, note}` against the actual carrier invoice; posts no money"
+    },
+    {
+      "name": "review_pod",
+      "method": "POST",
+      "path": "/v1/loads/{id}/pod/review",
+      "body": "json",
+      "description": "Finance review of the current external POD reference; same review shape; expected load version"
+    },
+    {
+      "name": "revise_bill",
+      "method": "POST",
+      "path": "/v1/bills/{id}/plan",
+      "body": "json",
+      "description": "Draft revision: `{expected_version, number, due_date, bill_to_address?}`"
+    },
+    {
+      "name": "revise_carrier_contract",
+      "method": "POST",
+      "path": "/v1/carrier-contracts/{id}/revise",
+      "body": "json",
+      "description": "POST /v1/carrier-contracts/{id}/revise; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "revise_plan",
+      "method": "POST",
+      "path": "/v1/loads/{id}/plan",
+      "body": "json",
+      "description": "Revise an untendered plan: `{expected_version, plan}`"
+    },
+    {
+      "name": "revise_quote",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/revise",
+      "body": "json",
+      "description": "Retain the prior revision and draft a new lane/price/terms revision"
+    },
+    {
+      "name": "revoke_document_share",
+      "method": "POST",
+      "path": "/v1/document-shares/{id}/revoke",
+      "body": "json",
+      "description": "Stop future grant authorization, retain file/evidence/history; current grant version"
+    },
+    {
+      "name": "settlement",
+      "method": "POST",
+      "path": "/v1/loads/{id}/settlement",
+      "body": "json",
+      "description": "Prepare settlement for approved invoice; body `{}`"
+    },
+    {
+      "name": "share_document",
+      "method": "POST",
+      "path": "/v1/documents/{id}/shares",
+      "body": "json",
+      "description": "Explicit named customer/carrier-tender file access; checked versions, content review and original bytes; [sharing rules](documents.md#sharing-api-and-persistence)"
+    },
+    {
+      "name": "shared_document_content",
+      "method": "GET",
+      "path": "/v1/portal/files/{id}/content",
+      "body": "none",
+      "description": "Scoped original file; atomic current-policy/byte check and download-authorization audit"
+    },
+    {
+      "name": "staff_release_statement",
+      "method": "GET",
+      "path": "/v1/release-publications/{id}/statement",
+      "body": "none",
+      "description": "Staff read; exact original HTML/hash"
+    },
+    {
+      "name": "sync_orders",
+      "method": "GET",
+      "path": "/v1/sync/orders",
+      "body": "none",
+      "description": "Read upstream sync order candidates"
+    },
+    {
+      "name": "update_billing_profile",
+      "method": "POST",
+      "path": "/v1/finance/profile",
+      "body": "json",
+      "description": "Billing issuer: `{expected_version, legal_name, address, contact, payment_instructions}`; first expected version is 0"
+    },
+    {
+      "name": "update_carrier",
+      "method": "POST",
+      "path": "/v1/carriers/{id}",
+      "body": "json",
+      "description": "POST /v1/carriers/{id}; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "update_customer",
+      "method": "POST",
+      "path": "/v1/customers/{id}",
+      "body": "json",
+      "description": "POST /v1/customers/{id}; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "update_driver",
+      "method": "POST",
+      "path": "/v1/drivers/{id}",
+      "body": "json",
+      "description": "POST /v1/drivers/{id}; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "update_equipment",
+      "method": "POST",
+      "path": "/v1/equipment/{id}",
+      "body": "json",
+      "description": "POST /v1/equipment/{id}; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "upload_document",
+      "method": "POST",
+      "path": "/v1/loads/{id}/documents",
+      "body": "binary",
+      "description": "Raw PDF/JPEG/PNG body, up to 10 MiB; content type must match; idempotent immutable upload"
+    },
+    {
+      "name": "void_bill",
+      "method": "POST",
+      "path": "/v1/bills/{id}/void",
+      "body": "json",
+      "description": "Void/reverse issued billing: `{expected_version, note}`; requires zero net retained funds and no active credits"
+    },
+    {
+      "name": "void_charge",
+      "method": "POST",
+      "path": "/v1/charges/{id}/void",
+      "body": "json",
+      "description": "Finance retract approval before its side posts; original decisions retained"
+    },
+    {
+      "name": "withdraw_carrier_contract",
+      "method": "POST",
+      "path": "/v1/carrier-contracts/{id}/withdraw",
+      "body": "json",
+      "description": "POST /v1/carrier-contracts/{id}/withdraw; existing Freight API validation and authorization apply."
+    },
+    {
+      "name": "withdraw_quote_offer",
+      "method": "POST",
+      "path": "/v1/quotes/{id}/offers/withdraw",
+      "body": "json",
+      "description": "Retain actual carrier offer retraction evidence on an unbooked quote"
+    },
+    {
+      "name": "workspace",
+      "method": "GET",
+      "path": "/v1/workspace",
+      "body": "none",
+      "description": "Tenant loads, document metadata, master data, invoices, settlements, events, inbound queue, handoffs, connection state"
+    }
+  ]
+}

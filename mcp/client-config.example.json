@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "stateset-freight": {
+      "command": "/absolute/path/to/node",
+      "args": ["/absolute/path/to/stateset-freight/mcp/src/index.mjs"],
+      "env": {
+        "FREIGHT_MCP_API_URL": "https://freight-api.example.com",
+        "FREIGHT_MCP_TOKEN_FILE": "/absolute/private/path/freight-token"
+      }
+    }
+  }
+}

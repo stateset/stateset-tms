@@ -1,0 +1,213 @@
+{
+  "publisher_commit": "ebb95f8add54eee8bed840e3fb587e4cbec857d7",
+  "libvips_source_commit": "24ad4d042940e6bf99a68871ba886ca8847c9c82",
+  "linux_component_versions": {
+    "aom": "3.15.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.6",
+    "cgif": "0.5.4",
+    "exif": "0.6.26",
+    "expat": "2.8.5",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.17",
+    "glib": "2.90.0",
+    "harfbuzz": "14.5.0",
+    "heif": "1.23.5",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.63.2",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.7",
+    "webp": "1.6.0",
+    "xml2": "2.15.4",
+    "zlib-ng": "2.3.3"
+  },
+  "posix_source_locators": [
+    {
+      "recipe_line": 123,
+      "locator": "https://github.com/frida/proxy-libintl/archive/0.5.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 130,
+      "locator": "https://github.com/zlib-ng/zlib-ng/archive/2.3.3.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 138,
+      "locator": "https://github.com/libffi/libffi/releases/download/v3.8.0/libffi-3.8.0.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 145,
+      "locator": "https://download.gnome.org/sources/glib/2.90/glib-2.90.0.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 147,
+      "locator": "https://gist.github.com/kleisauke/284d685efa00908da99ea6afbaaf39ae/raw/bdad5489a61c217850631571caf57f5db6ea8b2c/glib-without-gregex.patch",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 155,
+      "locator": "https://download.gnome.org/sources/libxml2/2.15/libxml2-2.15.4.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 162,
+      "locator": "https://github.com/libexif/libexif/releases/download/v0.6.26/libexif-0.6.26.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 170,
+      "locator": "https://github.com/mm2/Little-CMS/releases/download/lcms2.19.1/lcms2-2.19.1.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 177,
+      "locator": "https://storage.googleapis.com/aom-releases/libaom-3.15.1.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 190,
+      "locator": "https://github.com/strukturag/libheif/releases/download/v1.23.5/libheif-1.23.5.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 198,
+      "locator": "https://github.com/mozilla/mozjpeg/archive/0826579.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 201,
+      "locator": "https://github.com/mozilla/mozjpeg/commit/f90668e0e4fb79c81e1f24a0ccc0e2090af761bf.patch",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 210,
+      "locator": "https://github.com/pnggroup/libpng/archive/v1.6.58.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 217,
+      "locator": "https://github.com/lovell/libimagequant/archive/v2.4.1.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 223,
+      "locator": "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.6.0.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 230,
+      "locator": "https://gitlab.com/libtiff/libtiff/-/archive/v4.7.2/libtiff-v4.7.2.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 241,
+      "locator": "https://github.com/google/highway/archive/1.4.0.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 252,
+      "locator": "https://github.com/freetype/freetype/archive/VER-2-14-3.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 261,
+      "locator": "https://github.com/libexpat/libexpat/releases/download/R_2_8_5/expat-2.8.5.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 269,
+      "locator": "https://github.com/libarchive/libarchive/releases/download/v3.8.9/libarchive-3.8.9.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 278,
+      "locator": "https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.18.3/fontconfig-2.18.3.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 291,
+      "locator": "https://github.com/harfbuzz/harfbuzz/archive/14.5.0.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 302,
+      "locator": "https://cairographics.org/releases/pixman-0.46.4.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 310,
+      "locator": "https://cairographics.org/releases/cairo-1.18.6.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 318,
+      "locator": "https://github.com/fribidi/fribidi/releases/download/v1.0.17/fribidi-1.0.17.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 325,
+      "locator": "https://download.gnome.org/sources/pango/1.58/pango-1.58.2.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 334,
+      "locator": "https://download.gnome.org/sources/librsvg/2.63/librsvg-2.63.2.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 345,
+      "locator": "https://github.com/GNOME/librsvg/commit/9106011db93d701728ac2c9da50c9ab2c1bb5dc6.patch",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 354,
+      "locator": "https://github.com/dloebl/cgif/archive/v0.5.4.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 361,
+      "locator": "https://github.com/google/libultrahdr/archive/v2.0.2.tar.gz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 364,
+      "locator": "https://patch-diff.githubusercontent.com/raw/google/libultrahdr/pull/383.patch",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 373,
+      "locator": "https://github.com/libvips/libvips/releases/download/v8.18.7/vips-8.18.7.tar.xz",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 376,
+      "locator": "https://gist.githubusercontent.com/lovell/313a6901e9db1bf285f2a1f1180499e4/raw/3988223c7dfa4d22745d9392034b0117abef1446/libvips-cpp-soversion.patch",
+      "source_bytes_retrieved": false
+    },
+    {
+      "recipe_line": 484,
+      "locator": "https://raw.githubusercontent.com/lovell/sharp-libvips/main/THIRD-PARTY-NOTICES.md",
+      "source_bytes_retrieved": false
+    }
+  ],
+  "mutable_inputs": [
+    "THIRD-PARTY-NOTICES is fetched from main in the publisher recipe",
+    "libultrahdr pull/383.patch is a mutable PR endpoint",
+    "Wasm recipe accepts HEAD by default; the exact wasm-vips revision is not established here"
+  ],
+  "corresponding_source_complete": false,
+  "relinking_qualified": false
+}

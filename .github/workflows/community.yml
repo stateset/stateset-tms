@@ -1,0 +1,69 @@
+name: Community checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: community-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    name: Community source checks
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: dtolnay/rust-toolchain@7dcc700092a1a8b9c17ba0e140b4e34e93000946 # 1.90.0
+        with:
+          toolchain: 1.90.0
+          components: rustfmt, clippy
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+      - name: Install native PDF preview prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends poppler-utils util-linux fonts-dejavu-core
+      - name: Install checksum-pinned secret scanner
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/gitleaks"
+          curl --fail --silent --show-error --location --retry 3 https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz -o "$RUNNER_TEMP/gitleaks/archive.tar.gz"
+          echo "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb  $RUNNER_TEMP/gitleaks/archive.tar.gz" | sha256sum --check --strict
+          tar -xzf "$RUNNER_TEMP/gitleaks/archive.tar.gz" -C "$RUNNER_TEMP/gitleaks" gitleaks
+          echo "$RUNNER_TEMP/gitleaks" >> "$GITHUB_PATH"
+      - run: python3 scripts/check-secret-policy.py
+      - name: Scan fetched Git history
+        run: gitleaks git --log-opts='--all --full-history' --redact=100 --no-banner
+      - run: python3 scripts/check-open-source.py --source-alpha
+      - run: python3 -m unittest discover -s scripts -p 'test_*.py' -v
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --locked --workspace --all-targets --all-features -- -D warnings
+      - run: cargo test --locked --workspace
+      - run: cargo install cargo-deny --version 0.20.2 --locked
+      - run: cargo deny --locked --workspace --all-features --target x86_64-unknown-linux-gnu check licenses
+      - run: cargo build --locked -p stateset-freight -p stateset-freight-tui
+      - run: target/debug/stateset-freight --pdf-worker --probe-policy
+      - run: python3 scripts/check-tui-graphics.py target/debug/freight-tui
+      - run: python3 scripts/check-tui-graphics.py target/debug/freight-tui --api-binary target/debug/stateset-freight
+      - run: python3 scripts/check-tui-graphics.py target/debug/freight-tui --api-binary target/debug/stateset-freight --pdf
+      - run: FREIGHT_TUI_TEST_API_BINARY="$PWD/target/debug/stateset-freight" cargo test --locked -p stateset-freight-tui --features api-process-tests --test api_process
+      - run: python3 scripts/check-tui-terminal.py target/debug/freight-tui
+      - run: python3 scripts/check-tui-catalog-live.py target/debug/freight-tui
+      - run: npm --prefix web ci
+      - run: npm --prefix web run test:unit
+      - run: npm --prefix mcp ci
+      - run: npm --prefix mcp run check:catalog
+      - run: FREIGHT_MCP_TEST_API_BINARY="$PWD/target/debug/stateset-freight" npm --prefix mcp test
+      - run: cargo fetch --locked
+      - name: Collect dependency notices and report distribution reviews
+        shell: bash
+        run: |
+          freight_notices_parent="$(mktemp -d "$RUNNER_TEMP/freight-notices-XXXXXX")"
+          python3 scripts/collect-third-party-notices.py --output "$freight_notices_parent/bundle"

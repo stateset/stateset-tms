@@ -1,0 +1,141 @@
+# Separate schema ownership and runtime access on a dedicated local database.
+# Run explicitly with -f; this uses its own volume, not the development volume.
+x-api-image: &api-image
+  image: ${FREIGHT_API_IMAGE:-stateset-freight:local}
+  build: .
+
+services:
+  postgres:
+    image: ${FREIGHT_POSTGRES_IMAGE:-postgres:16-bookworm}
+    environment:
+      POSTGRES_DB: freight
+      POSTGRES_USER: freight
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set the schema owner password}
+      POSTGRES_HOST_AUTH_METHOD: scram-sha-256
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    volumes:
+      - freight-restricted-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: [CMD-SHELL, pg_isready -U freight -d freight]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  migrate:
+    <<: *api-image
+    command: [--migrate]
+    restart: "no"
+    environment:
+      DATABASE_URL: postgres://freight@postgres:5432/freight
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Set the schema owner password}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  grants:
+    image: ${FREIGHT_POSTGRES_IMAGE:-postgres:16-bookworm}
+    user: postgres
+    read_only: true
+    entrypoint: [/bin/bash, /freight/configure-runtime-role.sh]
+    restart: "no"
+    environment:
+      PGHOST: postgres
+      PGPORT: "5432"
+      PGDATABASE: freight
+      PGUSER: freight
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Set the schema owner password}
+      FREIGHT_RUNTIME_DATABASE_PASSWORD: ${FREIGHT_RUNTIME_DATABASE_PASSWORD:?Set a different runtime password}
+    volumes:
+      - ./scripts/configure-runtime-role.sh:/freight/configure-runtime-role.sh:ro
+      - ./scripts/configure-runtime-role.sql:/freight/configure-runtime-role.sql:ro
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  api:
+    <<: *api-image
+    stop_grace_period: 310s
+    environment:
+      FREIGHT_DEMO: ${FREIGHT_DEMO:-false}
+      FREIGHT_API_KEYS_JSON: ${FREIGHT_API_KEYS_JSON:?Set FREIGHT_API_KEYS_JSON}
+      FREIGHT_CLERK_JSON: ${FREIGHT_CLERK_JSON:-}
+      FREIGHT_INTEGRATIONS_JSON: ${FREIGHT_INTEGRATIONS_JSON:?Set FREIGHT_INTEGRATIONS_JSON}
+      FREIGHT_INTEGRATION_CONCURRENCY: ${FREIGHT_INTEGRATION_CONCURRENCY:-2}
+      FREIGHT_SHUTDOWN_TIMEOUT_MS: ${FREIGHT_SHUTDOWN_TIMEOUT_MS:-30000}
+      FREIGHT_METRICS_TOKEN: ${FREIGHT_METRICS_TOKEN:-}
+      DATABASE_URL: postgres://freight_app@postgres:5432/freight
+      PGPASSWORD: ${FREIGHT_RUNTIME_DATABASE_PASSWORD:?Set a different runtime password}
+      FREIGHT_MIGRATIONS: verify
+      FREIGHT_DATABASE_MAX_CONNECTIONS: ${FREIGHT_DATABASE_MAX_CONNECTIONS:-2}
+      FREIGHT_WRITE_MAX_IN_FLIGHT: ${FREIGHT_WRITE_MAX_IN_FLIGHT:-64}
+      FREIGHT_WRITE_TENANT_MAX_IN_FLIGHT: ${FREIGHT_WRITE_TENANT_MAX_IN_FLIGHT:-16}
+      FREIGHT_DATABASE_ACQUIRE_TIMEOUT_MS: ${FREIGHT_DATABASE_ACQUIRE_TIMEOUT_MS:-5000}
+      FREIGHT_DATABASE_STATEMENT_TIMEOUT_MS: ${FREIGHT_DATABASE_STATEMENT_TIMEOUT_MS:-30000}
+      FREIGHT_DATABASE_LOCK_TIMEOUT_MS: ${FREIGHT_DATABASE_LOCK_TIMEOUT_MS:-5000}
+      FREIGHT_READ_CONCURRENCY: ${FREIGHT_READ_CONCURRENCY:-2}
+      FREIGHT_READ_MAX_PENDING: ${FREIGHT_READ_MAX_PENDING:-64}
+      FREIGHT_READ_TENANT_MAX_PENDING: ${FREIGHT_READ_TENANT_MAX_PENDING:-16}
+      FREIGHT_READ_QUEUE_TIMEOUT_MS: ${FREIGHT_READ_QUEUE_TIMEOUT_MS:-5000}
+      FREIGHT_BIND_ADDR: 0.0.0.0:8090
+      FREIGHT_PDF_RENDERER_SOCKET: /run/freight-pdf/renderer.sock
+      FREIGHT_PDF_RENDERER_UID: "10002"
+    volumes:
+      - freight-restricted-renderer-socket:/run/freight-pdf:ro
+    ports: ["127.0.0.1:${FREIGHT_API_PORT:-8090}:8090"]
+    depends_on:
+      grants:
+        condition: service_completed_successfully
+      renderer:
+        condition: service_healthy
+
+  renderer:
+    <<: *api-image
+    command: [--pdf-renderer-service]
+    user: "10002:10001"
+    read_only: true
+    network_mode: none
+    ipc: private
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 384m
+    memswap_limit: 384m
+    cpus: 1
+    pids_limit: 16
+    stop_grace_period: 20s
+    restart: unless-stopped
+    tmpfs:
+      - /tmp:rw,nosuid,nodev,noexec,size=16777216,uid=10002,gid=10001,mode=0700
+    volumes:
+      - freight-restricted-renderer-socket:/run/freight-pdf
+    healthcheck:
+      test: [CMD, /usr/local/bin/stateset-freight, --check-pdf-renderer]
+      interval: 10s
+      timeout: 3s
+      start_period: 10s
+      retries: 3
+
+  web:
+    image: ${FREIGHT_WEB_IMAGE:-stateset-freight-web:local}
+    build: ./web
+    environment:
+      FREIGHT_DEMO: ${FREIGHT_DEMO:-false}
+      FREIGHT_API_URL: http://api:8090
+      FREIGHT_WEB_AUTH_MODE: ${FREIGHT_WEB_AUTH_MODE:-credential}
+      FREIGHT_CLERK_PUBLISHABLE_KEY: ${FREIGHT_CLERK_PUBLISHABLE_KEY:-}
+      FREIGHT_SESSION_SECRET: ${FREIGHT_SESSION_SECRET:-}
+      FREIGHT_SAVE_JOURNAL_KEYS_JSON: ${FREIGHT_SAVE_JOURNAL_KEYS_JSON:-}
+      FREIGHT_WEB_ORIGIN: ${FREIGHT_WEB_ORIGIN:-http://localhost:3010}
+      FREIGHT_COOKIE_SECURE: ${FREIGHT_COOKIE_SECURE:-false}
+    ports: ["127.0.0.1:${FREIGHT_WEB_PORT:-3010}:3010"]
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  freight-restricted-postgres:
+  freight-restricted-renderer-socket:
+    driver: local
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+      o: "size=1048576,uid=10002,gid=10001,mode=0750"

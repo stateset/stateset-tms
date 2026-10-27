@@ -1,0 +1,26 @@
+/target/
+/integration-contracts/target/
+/web/node_modules/
+/web/.next/
+/web/.next-dev/
+/web/playwright-report/
+/web/test-results/
+/web/test-results-offline/
+.env
+.env.local
+*.log
+
+/runtime-contracts/target/
+/storage-codec/target/
+/crates/storage-codec/target/
+__pycache__/
+
+/mcp/node_modules/
+/mcp/npm-debug.log
+
+# Raw qualification archives and database backups stay in local artifact storage.
+/docs/evidence/*.tar.gz
+/docs/evidence/*.gz
+/docs/evidence/*.dump
+/docs/evidence/*-candidate-api-*
+/docs/evidence/*.env

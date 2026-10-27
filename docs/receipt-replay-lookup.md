@@ -1,0 +1,27 @@
+# Selected receipt lookup: preceding release
+
+The current shared-save implementation is [single-transaction shared saves](conditional-save-transactions.md). The ordinary-command optional read preflight described below is historical and has been replaced. This page records the preceding qualified source and its original evidence.
+
+An exact save retry can now read its original receipt without transferring and decoding the entire tenant workspace. The same selected lookup serves existing source-protected HTTP probes before a canonical Sync fetch. Ordinary shared commands use it opportunistically before their existing mutation transaction. An original result remains the original result: this path performs no new decision, version increment, audit event, file insertion or workspace update.
+
+## Receipt and admission contract
+
+The request fingerprint still binds operation, entity and original body, including the existing logical Sync-import normalization. A changed request cannot reuse the key. A stopped original returns the existing stopped-save error; it cannot become an application or a successful replay. Existing API authentication and route capabilities still apply. Partner portal and document mutation paths retain their own party, policy and file checks.
+
+PostgreSQL checks the global storage registry under its existing shared lock. One SQL statement then observes the tenant's exact format marker, receipt-map type and selected original at one statement snapshot. The key is a bound text path component, so punctuation and Unicode cannot become JSON paths or SQL. The selected original is deserialized as the existing `Receipt` model and checked before constructing the replay result. The registry lock remains held through validation; admission remains owned through SQL and the blocking worker even if the caller disappears. Memory mode borrows the selected receipt under its owned read guard instead of cloning a workspace.
+
+A mandatory source-protected probe retains the existing finite read queue. The optional ordinary-command shortcut can only use immediately idle capacity and yields to registered readers. If capacity is occupied, closed or unavailable, the command takes its preceding mutation path. Read overload cannot introduce a queue or rejection for physical tracking writes. Missing receipts also take the preceding locked full-source path, which rechecks the latest receipt before applying anything; concurrent first attempts cannot create duplicate applications.
+
+This is a selected-record integrity boundary. It validates the source format, receipt collection and chosen receipt; it does not certify unrelated retained history or other receipts. A known original remains replayable when unrelated history is malformed. Full workspace reads and new saves still reject that malformed source. Nothing is repaired, discarded or rewritten by a lookup. This boundary is deliberately tested with damaged retained records.
+
+## Evidence and limits
+
+The release passes **438 distinct tests**: 242 active Rust, 62 PostgreSQL 16, 26 Node, eight actual frozen EDI codec contracts and all 100 production-browser scenarios. A separate **45-check** actual-service drill restores all 148 application tables and retains exact original receipts, financial records, documents and pre-loss history cursors.
+
+The first actual-service drill passed its lifecycle and restore assertions but failed its final EDI source-drift guard. It remains unqualified. The repeat uses one frozen Freight/EDI/Sync tree, so the relative runtime-wire and codec dependencies also resolve into the pinned EDI source. Sync's declared benchmark target, embedded API documentation assets and connector catalog are retained as additional build inputs; a source-only fingerprint does not certify those files. Later canonical checkout changes do not replace the tested version.
+
+All 100 browser scenarios passed on the first run. Its initial controller incorrectly used exclusive port rebinding to verify teardown and rejected a transient occupied socket after HTTP shutdown. A separate confirmation checks absence of LISTEN sockets, connection refusal on all four endpoints, and the API/source/artifact hashes. The initial controller report remains retained alongside that confirmation. No browser test failure is concealed or counted twice.
+
+The final PostgreSQL fixture retained 1,500 other receipts. Its authoritative tenant text was **4,312,924 bytes**; the selected original receipt text was **1,341 bytes**. These lengths exclude PostgreSQL protocol framing and do not change the original HTTP response.
+
+The large synthetic receipt scenario compares the actual source text size with the selected receipt text size, checks exact original results and verifies unchanged physical source revisions. These are transfer/validation observations, not a measured latency or capacity claim. PostgreSQL still decompresses the tenant JSONB, and checking the receipt collection can materialize retained data inside the database. The size of one arbitrary response is not bounded by this change. A new ordinary save with available read capacity adds a read transaction before its existing mutation; this tradeoff has not been qualified under sustained offered load. The full workspace transaction remains the write authority.
